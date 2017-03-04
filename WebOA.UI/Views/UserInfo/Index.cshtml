@@ -1,0 +1,29 @@
+﻿@model List<WebOA.Model.UserInfo>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>用户信息表</title>
+</head>
+<body>
+    <div>
+        <table border="1">
+            <tr><th>编号&nbsp;</th><th>姓名&nbsp;</th><th>性别&nbsp;</th><th>年龄&nbsp;</th></tr>
+            @foreach (var userInfo in Model)
+            {
+                <tr>
+                    <td>@userInfo.UserId &nbsp;</td>
+                    <td>@userInfo.UserName &nbsp;</td>
+                    <td>@(userInfo.UserGender ? "男" : "女") &nbsp;</td>
+                    <td>@userInfo.UserAge &nbsp;</td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>
