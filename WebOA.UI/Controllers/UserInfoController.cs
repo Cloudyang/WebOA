@@ -16,5 +16,21 @@ namespace WebOA.UI.Controllers
             ViewData.Model = userInfoService.GetList(u => true);
             return View();
         }
+
+        public ActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public  ActionResult Add(WebOA.Model.UserInfo u)
+        {
+            string result = "no";
+            if (userInfoService.Add(u))
+            {
+                result = "ok";
+            }
+            return Content(result);
+        }
     }
 }
