@@ -1,0 +1,17 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ include file="EF.Utility.CS.ttinclude"#>
+<#@ output extension=".cs" #>
+using WebOA.Model;
+
+namespace WebOA.IService
+{
+<#
+	MetadataLoader loader=new MetadataLoader(this);
+	EdmItemCollection collection=loader.CreateEdmItemCollection(@"C:\Users\yy_ye\Documents\c#\OA代码\WebOA\WebOA.Model\WebOA.edmx");
+	foreach(EntityType item in collection.GetItems<EntityType>())
+	{
+#>
+	public partial interface I<#=item.Name#>Service : IService<<#=item.Name#>>
+	{}
+<#}#>
+}

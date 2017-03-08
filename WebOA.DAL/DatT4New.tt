@@ -1,0 +1,22 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ include file="EF.Utility.CS.ttinclude"#>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using WebOA.IDAL;
+using WebOA.Model;
+
+namespace WebOA.DAL
+{
+<#
+	MetadataLoader loader=new MetadataLoader(this);
+	EdmItemCollection collection=loader.CreateEdmItemCollection(@"C:\Users\yy_ye\Documents\c#\OA代码\WebOA\WebOA.Model\WebOA.edmx");
+	foreach(EntityType item in collection.GetItems<EntityType>())
+	{
+#>
+	public partial class <#=item.Name#>Dal : BaseDal<<#=item.Name#>>,I<#=item.Name#>Dal
+	{}
+<#}#>
+}

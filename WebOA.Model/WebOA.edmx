@@ -4,146 +4,361 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="WebOA.Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="CustomerInfo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Address" Type="varchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="OrderInfo">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrderName" Type="varchar" MaxLength="50" />
-          <Property Name="CustomerId" Type="int" />
-          <Property Name="CustomerInfo_Id" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="UserInfo">
-          <Key>
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="10" Nullable="false" />
-          <Property Name="UserGender" Type="bit" Nullable="false" />
-          <Property Name="UserAge" Type="int" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_CustomerInfoOrderInfo">
-          <End Role="CustomerInfo" Type="Self.CustomerInfo" Multiplicity="1" />
-          <End Role="OrderInfo" Type="Self.OrderInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerInfo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderInfo">
-              <PropertyRef Name="CustomerInfo_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="WebOAModelStoreContainer">
-          <EntitySet Name="CustomerInfo" EntityType="Self.CustomerInfo" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OrderInfo" EntityType="Self.OrderInfo" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_CustomerInfoOrderInfo" Association="Self.FK_CustomerInfoOrderInfo">
-            <End Role="CustomerInfo" EntitySet="CustomerInfo" />
-            <End Role="OrderInfo" EntitySet="OrderInfo" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="WebOA.Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="WebOAModelStoreContainer">
+    <EntitySet Name="UserInfo" EntityType="WebOA.Model.Store.UserInfo" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RoleInfo" EntityType="WebOA.Model.Store.RoleInfo" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ActionInfo" EntityType="WebOA.Model.Store.ActionInfo" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserAction" EntityType="WebOA.Model.Store.UserAction" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserInfoRoleInfo" EntityType="WebOA.Model.Store.UserInfoRoleInfo" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RoleInfoActionInfo" EntityType="WebOA.Model.Store.RoleInfoActionInfo" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_UserInfoRoleInfo_UserInfo" Association="WebOA.Model.Store.FK_UserInfoRoleInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInfoRoleInfo_RoleInfo" Association="WebOA.Model.Store.FK_UserInfoRoleInfo_RoleInfo">
+      <End Role="RoleInfo" EntitySet="RoleInfo" />
+      <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
+    </AssociationSet>
+    <AssociationSet Name="UserInfoUserAction" Association="WebOA.Model.Store.UserInfoUserAction">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="UserAction" EntitySet="UserAction" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RoleInfoActionInfo_RoleInfo" Association="WebOA.Model.Store.FK_RoleInfoActionInfo_RoleInfo">
+      <End Role="RoleInfo" EntitySet="RoleInfo" />
+      <End Role="RoleInfoActionInfo" EntitySet="RoleInfoActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RoleInfoActionInfo_ActionInfo" Association="WebOA.Model.Store.FK_RoleInfoActionInfo_ActionInfo">
+      <End Role="ActionInfo" EntitySet="ActionInfo" />
+      <End Role="RoleInfoActionInfo" EntitySet="RoleInfoActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="ActionInfoUserAction" Association="WebOA.Model.Store.ActionInfoUserAction">
+      <End Role="ActionInfo" EntitySet="ActionInfo" />
+      <End Role="UserAction" EntitySet="UserAction" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="UserInfo">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="UserPwd" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="Remark" Type="nvarchar" Nullable="false" MaxLength="1000" />
+    <Property Name="SubBy" Type="int" Nullable="false" />
+    <Property Name="SubTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RoleInfo">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="Remark" Type="nvarchar" Nullable="false" MaxLength="1000" />
+    <Property Name="SubBy" Type="int" Nullable="false" />
+    <Property Name="SubTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ActionInfo">
+    <Key>
+      <PropertyRef Name="ActionId" />
+    </Key>
+    <Property Name="ActionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="Remark" Type="nvarchar" Nullable="false" MaxLength="1000" />
+    <Property Name="SubBy" Type="int" Nullable="false" />
+    <Property Name="SubTime" Type="datetime" Nullable="false" />
+    <Property Name="ActionTitle" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="ControllerName" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="ActionName" Type="varchar" Nullable="false" MaxLength="20" />
+    <Property Name="IsMenu" Type="bit" Nullable="false" />
+    <Property Name="MenuIcon" Type="varchar" Nullable="false" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="UserAction">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ActionId" />
+    </Key>
+    <Property Name="IsAllow" Type="bit" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ActionId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserInfoRoleInfo">
+    <Key>
+      <PropertyRef Name="UserInfo_UserId" />
+      <PropertyRef Name="RoleInfo_RoleId" />
+    </Key>
+    <Property Name="UserInfo_UserId" Type="int" Nullable="false" />
+    <Property Name="RoleInfo_RoleId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RoleInfoActionInfo">
+    <Key>
+      <PropertyRef Name="RoleInfo_RoleId" />
+      <PropertyRef Name="ActionInfo_ActionId" />
+    </Key>
+    <Property Name="RoleInfo_RoleId" Type="int" Nullable="false" />
+    <Property Name="ActionInfo_ActionId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="UserInfoUserAction">
+    <End Role="UserInfo" Type="WebOA.Model.Store.UserInfo" Multiplicity="1" />
+    <End Role="UserAction" Type="WebOA.Model.Store.UserAction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="UserAction">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ActionInfoUserAction">
+    <End Role="ActionInfo" Type="WebOA.Model.Store.ActionInfo" Multiplicity="1" />
+    <End Role="UserAction" Type="WebOA.Model.Store.UserAction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ActionInfo">
+        <PropertyRef Name="ActionId" />
+      </Principal>
+      <Dependent Role="UserAction">
+        <PropertyRef Name="ActionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInfoRoleInfo_UserInfo">
+    <End Role="UserInfo" Type="WebOA.Model.Store.UserInfo" Multiplicity="1" />
+    <End Role="UserInfoRoleInfo" Type="WebOA.Model.Store.UserInfoRoleInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="UserInfoRoleInfo">
+        <PropertyRef Name="UserInfo_UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInfoRoleInfo_RoleInfo">
+    <End Role="UserInfoRoleInfo" Type="WebOA.Model.Store.UserInfoRoleInfo" Multiplicity="*" />
+    <End Role="RoleInfo" Type="WebOA.Model.Store.RoleInfo" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="RoleInfo">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="UserInfoRoleInfo">
+        <PropertyRef Name="RoleInfo_RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RoleInfoActionInfo_RoleInfo">
+    <End Role="RoleInfo" Type="WebOA.Model.Store.RoleInfo" Multiplicity="1" />
+    <End Role="RoleInfoActionInfo" Type="WebOA.Model.Store.RoleInfoActionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RoleInfo">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="RoleInfoActionInfo">
+        <PropertyRef Name="RoleInfo_RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RoleInfoActionInfo_ActionInfo">
+    <End Role="RoleInfoActionInfo" Type="WebOA.Model.Store.RoleInfoActionInfo" Multiplicity="*" />
+    <End Role="ActionInfo" Type="WebOA.Model.Store.ActionInfo" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="ActionInfo">
+        <PropertyRef Name="ActionId" />
+      </Principal>
+      <Dependent Role="RoleInfoActionInfo">
+        <PropertyRef Name="ActionInfo_ActionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WebOA.Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="CustomerInfo">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="OrderInfo" Relationship="Self.FK_CustomerInfoOrderInfo" FromRole="CustomerInfo" ToRole="OrderInfo" />
-        </EntityType>
-        <EntityType Name="OrderInfo">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustomerId" Type="Int32" />
-          <Property Name="CustomerInfo_Id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CustomerInfo" Relationship="Self.FK_CustomerInfoOrderInfo" FromRole="OrderInfo" ToRole="CustomerInfo" />
-        </EntityType>
+        <EntityContainer Name="WebOAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="UserInfo" EntityType="WebOA.Model.UserInfo" />
+          <EntitySet Name="RoleInfo" EntityType="WebOA.Model.RoleInfo" />
+          <EntitySet Name="ActionInfo" EntityType="WebOA.Model.ActionInfo" />
+          <EntitySet Name="UserAction" EntityType="WebOA.Model.UserAction" />
+          <AssociationSet Name="UserInfoRoleInfo" Association="WebOA.Model.UserInfoRoleInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="RoleInfo" EntitySet="RoleInfo" />
+          </AssociationSet>
+          <AssociationSet Name="UserInfoUserAction" Association="WebOA.Model.UserInfoUserAction">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="UserAction" EntitySet="UserAction" />
+          </AssociationSet>
+          <AssociationSet Name="RoleInfoActionInfo" Association="WebOA.Model.RoleInfoActionInfo">
+            <End Role="RoleInfo" EntitySet="RoleInfo" />
+            <End Role="ActionInfo" EntitySet="ActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="ActionInfoUserAction" Association="WebOA.Model.ActionInfoUserAction">
+            <End Role="ActionInfo" EntitySet="ActionInfo" />
+            <End Role="UserAction" EntitySet="UserAction" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="UserInfo">
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UserGender" Type="Boolean" Nullable="false" />
-          <Property Name="UserAge" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="UserPwd" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="Remark" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="SubBy" Type="Int32" Nullable="false" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="RoleInfo" Relationship="WebOA.Model.UserInfoRoleInfo" FromRole="UserInfo" ToRole="RoleInfo" />
+          <NavigationProperty Name="UserAction" Relationship="WebOA.Model.UserInfoUserAction" FromRole="UserInfo" ToRole="UserAction" />
         </EntityType>
-        <Association Name="FK_CustomerInfoOrderInfo">
-          <End Role="CustomerInfo" Type="Self.CustomerInfo" Multiplicity="1" />
-          <End Role="OrderInfo" Type="Self.OrderInfo" Multiplicity="*" />
+        <EntityType Name="RoleInfo">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="Remark" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="SubBy" Type="Int32" Nullable="false" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="UserInfo" Relationship="WebOA.Model.UserInfoRoleInfo" FromRole="RoleInfo" ToRole="UserInfo" />
+          <NavigationProperty Name="ActionInfo" Relationship="WebOA.Model.RoleInfoActionInfo" FromRole="RoleInfo" ToRole="ActionInfo" />
+        </EntityType>
+        <EntityType Name="ActionInfo">
+          <Key>
+            <PropertyRef Name="ActionId" />
+          </Key>
+          <Property Name="ActionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="Remark" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="SubBy" Type="Int32" Nullable="false" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" />
+          <Property Name="ActionTitle" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ControllerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ActionName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsMenu" Type="Boolean" Nullable="false" />
+          <Property Name="MenuIcon" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="RoleInfo" Relationship="WebOA.Model.RoleInfoActionInfo" FromRole="ActionInfo" ToRole="RoleInfo" />
+          <NavigationProperty Name="UserAction" Relationship="WebOA.Model.ActionInfoUserAction" FromRole="ActionInfo" ToRole="UserAction" />
+        </EntityType>
+        <EntityType Name="UserAction">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="ActionId" />
+          </Key>
+          <Property Name="IsAllow" Type="Boolean" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ActionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserInfo" Relationship="WebOA.Model.UserInfoUserAction" FromRole="UserAction" ToRole="UserInfo" />
+          <NavigationProperty Name="ActionInfo" Relationship="WebOA.Model.ActionInfoUserAction" FromRole="UserAction" ToRole="ActionInfo" />
+        </EntityType>
+        <Association Name="UserInfoRoleInfo">
+          <End Type="WebOA.Model.UserInfo" Role="UserInfo" Multiplicity="*" />
+          <End Type="WebOA.Model.RoleInfo" Role="RoleInfo" Multiplicity="*" />
+        </Association>
+        <Association Name="UserInfoUserAction">
+          <End Type="WebOA.Model.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="WebOA.Model.UserAction" Role="UserAction" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CustomerInfo">
-              <PropertyRef Name="Id" />
+            <Principal Role="UserInfo">
+              <PropertyRef Name="UserId" />
             </Principal>
-            <Dependent Role="OrderInfo">
-              <PropertyRef Name="CustomerInfo_Id" />
+            <Dependent Role="UserAction">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="WebOAEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CustomerInfo" EntityType="Self.CustomerInfo" />
-          <EntitySet Name="OrderInfo" EntityType="Self.OrderInfo" />
-          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" />
-          <AssociationSet Name="FK_CustomerInfoOrderInfo" Association="Self.FK_CustomerInfoOrderInfo">
-            <End Role="CustomerInfo" EntitySet="CustomerInfo" />
-            <End Role="OrderInfo" EntitySet="OrderInfo" />
-          </AssociationSet>
-        </EntityContainer>
+        <Association Name="RoleInfoActionInfo">
+          <End Type="WebOA.Model.RoleInfo" Role="RoleInfo" Multiplicity="*" />
+          <End Type="WebOA.Model.ActionInfo" Role="ActionInfo" Multiplicity="*" />
+        </Association>
+        <Association Name="ActionInfoUserAction">
+          <End Type="WebOA.Model.ActionInfo" Role="ActionInfo" Multiplicity="1" />
+          <End Type="WebOA.Model.UserAction" Role="UserAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionInfo">
+              <PropertyRef Name="ActionId" />
+            </Principal>
+            <Dependent Role="UserAction">
+              <PropertyRef Name="ActionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="WebOAModelStoreContainer" CdmEntityContainer="WebOAEntities">
-          <EntitySetMapping Name="CustomerInfo">
-            <EntityTypeMapping TypeName="WebOA.Model.CustomerInfo">
-              <MappingFragment StoreEntitySet="CustomerInfo">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OrderInfo">
-            <EntityTypeMapping TypeName="WebOA.Model.OrderInfo">
-              <MappingFragment StoreEntitySet="OrderInfo">
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="OrderName" ColumnName="OrderName" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CustomerInfo_Id" ColumnName="CustomerInfo_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserInfo">
-            <EntityTypeMapping TypeName="WebOA.Model.UserInfo">
-              <MappingFragment StoreEntitySet="UserInfo">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="UserGender" ColumnName="UserGender" />
-                <ScalarProperty Name="UserAge" ColumnName="UserAge" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WebOAModelStoreContainer" CdmEntityContainer="WebOAEntities">
+    <EntitySetMapping Name="UserInfo">
+      <EntityTypeMapping TypeName="IsTypeOf(WebOA.Model.UserInfo)">
+        <MappingFragment StoreEntitySet="UserInfo">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserPwd" ColumnName="UserPwd" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="SubBy" ColumnName="SubBy" />
+          <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoleInfo">
+      <EntityTypeMapping TypeName="IsTypeOf(WebOA.Model.RoleInfo)">
+        <MappingFragment StoreEntitySet="RoleInfo">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="SubBy" ColumnName="SubBy" />
+          <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActionInfo">
+      <EntityTypeMapping TypeName="IsTypeOf(WebOA.Model.ActionInfo)">
+        <MappingFragment StoreEntitySet="ActionInfo">
+          <ScalarProperty Name="ActionId" ColumnName="ActionId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="SubBy" ColumnName="SubBy" />
+          <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+          <ScalarProperty Name="ActionTitle" ColumnName="ActionTitle" />
+          <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+          <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+          <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+          <ScalarProperty Name="MenuIcon" ColumnName="MenuIcon" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserAction">
+      <EntityTypeMapping TypeName="IsTypeOf(WebOA.Model.UserAction)">
+        <MappingFragment StoreEntitySet="UserAction">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ActionId" ColumnName="ActionId" />
+          <ScalarProperty Name="IsAllow" ColumnName="IsAllow" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="UserInfoRoleInfo" TypeName="WebOA.Model.UserInfoRoleInfo" StoreEntitySet="UserInfoRoleInfo">
+      <EndProperty Name="UserInfo">
+        <ScalarProperty Name="UserId" ColumnName="UserInfo_UserId" />
+      </EndProperty>
+      <EndProperty Name="RoleInfo">
+        <ScalarProperty Name="RoleId" ColumnName="RoleInfo_RoleId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RoleInfoActionInfo" TypeName="WebOA.Model.RoleInfoActionInfo" StoreEntitySet="RoleInfoActionInfo">
+      <EndProperty Name="RoleInfo">
+        <ScalarProperty Name="RoleId" ColumnName="RoleInfo_RoleId" />
+      </EndProperty>
+      <EndProperty Name="ActionInfo">
+        <ScalarProperty Name="ActionId" ColumnName="ActionInfo_ActionId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -157,7 +372,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
       </DesignerInfoPropertySet>
     </Options>

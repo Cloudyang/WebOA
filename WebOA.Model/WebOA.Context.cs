@@ -25,8 +25,9 @@ namespace WebOA.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<CustomerInfo> CustomerInfo { get; set; }
-        public virtual DbSet<OrderInfo> OrderInfo { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
+        public virtual DbSet<RoleInfo> RoleInfo { get; set; }
+        public virtual DbSet<ActionInfo> ActionInfo { get; set; }
+        public virtual DbSet<UserAction> UserAction { get; set; }
     }
 }

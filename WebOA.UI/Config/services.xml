@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object name="UserInfoService1" type="WebOA.Service.UserInfoService,WebOA.Service" singleton="false"/>
+  <!--
+  <object name="RoleInfoService1" type="HM13OA.Service.RoleInfoService,HM13OA.Service" singleton="false"/>
+  <object name="ActionInfoService1" type="HM13OA.Service.ActionInfoService,HM13OA.Service" singleton="false"/>
+  <object name="UserActionService1" type="HM13OA.Service.UserActionService,HM13OA.Service" singleton="false"/>
+  -->
+</objects>

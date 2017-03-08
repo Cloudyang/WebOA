@@ -14,9 +14,24 @@ namespace WebOA.Model
     
     public partial class UserInfo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public UserInfo()
+        {
+            this.RoleInfo = new HashSet<RoleInfo>();
+            this.UserAction = new HashSet<UserAction>();
+        }
+    
         public int UserId { get; set; }
         public string UserName { get; set; }
-        public bool UserGender { get; set; }
-        public int UserAge { get; set; }
+        public string UserPwd { get; set; }
+        public bool IsDelete { get; set; }
+        public string Remark { get; set; }
+        public int SubBy { get; set; }
+        public System.DateTime SubTime { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RoleInfo> RoleInfo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserAction> UserAction { get; set; }
     }
 }

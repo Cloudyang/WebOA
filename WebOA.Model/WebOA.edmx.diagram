@@ -5,10 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="05cd8749d4d24da8aad6974fb201fe9d" Name="Diagram1">
-        <EntityTypeShape EntityType="WebOA.Model.CustomerInfo" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="WebOA.Model.OrderInfo" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="WebOA.Model.UserInfo" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <AssociationConnector Association="WebOA.Model.FK_CustomerInfoOrderInfo" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="WebOA.Model.UserInfo" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="WebOA.Model.RoleInfo" Width="1.5" PointX="3.125" PointY="3.125" />
+        <EntityTypeShape EntityType="WebOA.Model.ActionInfo" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="WebOA.Model.UserAction" Width="1.5" PointX="3.125" PointY="0.5" />
+        <AssociationConnector Association="WebOA.Model.UserInfoRoleInfo" />
+        <AssociationConnector Association="WebOA.Model.UserInfoUserAction" />
+        <AssociationConnector Association="WebOA.Model.RoleInfoActionInfo" />
+        <AssociationConnector Association="WebOA.Model.ActionInfoUserAction" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

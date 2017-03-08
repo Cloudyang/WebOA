@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using WebOA.UI.Models;
 
 namespace WebOA.UI
 {
@@ -7,7 +8,7 @@ namespace WebOA.UI
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new MyHandleErrorAttribute());
         }
     }
 }
