@@ -1,31 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net">
-  <!--
-  <object type="HM13OA.UI.Controllers.UserInfo1Controller,HM13OA.UI"  singleton="false" parent="BaseController">
+  <object type="WebOA.UI.Controllers.UserInfoController,WebOA.UI"  singleton="false" parent="BaseController">
     <property name="RoleInfoService" ref="RoleInfoService1"/>
   </object>
-  <object type="HM13OA.UI.Controllers.RoleInfoController,HM13OA.UI"  singleton="false" parent="BaseController">
+  <object type="WebOA.UI.Controllers.RoleInfoController,WebOA.UI"  singleton="false" parent="BaseController">
     <property name="RoleInfoService" ref="RoleInfoService1"/>
   </object>
-  <object type="HM13OA.UI.Controllers.ActionInfoController,HM13OA.UI"  singleton="false" parent="BaseController">
+  <object type="WebOA.UI.Controllers.ActionInfoController,WebOA.UI"  singleton="false" parent="BaseController">
   </object>
-  <object type="HM13OA.UI.Controllers.HomeController,HM13OA.UI"  singleton="false" parent="BaseController">
+  <object type="WebOA.UI.Controllers.HomeController,WebOA.UI"  singleton="false" parent="BaseController">
   </object>
-  <object name="BaseController" type="HM13OA.UI.Controllers.MyBaseController,HM13OA.UI"  singleton="false">
+  <object name="BaseController" type="WebOA.UI.Controllers.MyBaseController,WebOA.UI"  singleton="false">
     <property name="UserInfoService" ref="UserInfoService1"/>
     <property name="ActionInfoService" ref="ActionInfoService1"/>
     <property name="UserActionService" ref="UserActionService1"/>
   </object>
 
-  <object type="HM13OA.UI.Controllers.UserLoginController,HM13OA.UI"  singleton="false">
+  <object type="WebOA.UI.Controllers.UserLoginController,WebOA.UI"  singleton="false">
     <property name="UserInfoService" ref="UserInfoService1"/>
   </object>
 
--->
-
-
-
-  <object type="WebOA.UI.Controllers.UserInfoController,WebOA.UI"  singleton="false">
-    <property name="userInfoService" ref="UserInfoService1"/>
+  <object type="WebOA.UI.Controllers.UserInfo1Controller,WebOA.UI"  singleton="false">
+    <property name="UserInfoService" ref="UserInfoService1"/>
   </object>
 </objects>

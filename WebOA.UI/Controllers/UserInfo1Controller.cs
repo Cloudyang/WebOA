@@ -10,10 +10,9 @@ using WebOA.IService;
 
 namespace WebOA.UI.Controllers
 {
-    public partial class UserInfoController : MyBaseController
+    public partial class UserInfo1Controller : Controller
     {
-      //  private UserInfoService userInfoService = new UserInfoService();
-        public IRoleInfoService RoleInfoService { set; get; }
+        private UserInfoService UserInfoService = new UserInfoService();
         public ActionResult Index()
         {
             return View();
@@ -150,44 +149,6 @@ namespace WebOA.UI.Controllers
 
             return Content(result);
         }
-
-        public ActionResult SetRole(int id1)
-        {
-            ViewBag.UserInfo = UserInfoService.GetById(id1);
-            ViewData.Model = RoleInfoService.GetList(r => r.IsDelete == false).ToList();
-            return View();
-        }
-        [HttpPost]
-        public ActionResult SetRole(int uid, string rids)
-        {
-            string result = "no";
-            if (UserInfoService.SetRole(uid, rids))
-            {
-                result = "ok";
-            }
-            return Content(result);
-        }
-
-        public ActionResult SetAction(int id1)
-        {
-            UserInfo userInfo = UserInfoService.GetById(id1);
-            ViewBag.UserInfo = userInfo;
-            ViewData.Model = ActionInfoService.GetList(a => a.IsDelete == false).ToList();
-            ViewBag.UserAction = userInfo.UserAction.ToList();
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult SetAction(int uid, int aid, Common.IsAllow allow)
-        {
-            string result = "no";
-
-            if (UserInfoService.SetAction(uid, aid, allow))
-            {
-                result = "ok";
-            }
-
-            return Content(result);
-        }
+        
     }
 }

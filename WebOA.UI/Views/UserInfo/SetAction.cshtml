@@ -1,0 +1,88 @@
+﻿@using WebOA.Model
+@model List<WebOA.Model.ActionInfo>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SetAction</title>
+    <script src="~/Scripts/jquery-1.11.3.min.js"></script>
+    <script>
+        $(function () {
+            $(':radio:not(:checked)').bind('click', Click1);
+        });
+
+        function Click1() {
+            //收集数据
+            var uid = $('#UserId').val();
+            var aid = $(this).attr('name');
+            var allow = $(this).val();
+                
+            //发送异步请求
+            $.post('@Url.Action("SetAction","UserInfo1")', {
+                    uid: uid,
+                    aid: aid,
+                    allow: allow
+                }, function(msg) {
+                    if (msg != "ok") {
+                        alert('分配否决失败，请稍候重试');
+                    }
+                });
+                
+            //处理绑定事件，防止用户多次点击已选中的单选按钮
+            $(this).unbind('click').siblings().unbind('click').bind('click', Click1);
+        }
+    </script>
+</head>
+<body>
+    <div>
+        @{
+            UserInfo userInfo = ViewBag.UserInfo as UserInfo;
+            List<UserAction> list = ViewBag.UserAction as List<UserAction>;
+        }
+        <input type="hidden" id="UserId" value="@userInfo.UserId"/>
+        <table border="1">
+            <thead>
+                <th>权限名称</th>
+                <th>设置</th>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ActionTitle</td>
+                        <td>
+                            <input type="radio" name="@item.ActionId"
+                                @if (list.Where(ua=>(ua.ActionId==item.ActionId)&&(ua.IsAllow==true)).Count()>0)
+                                    {
+                                        @(" checked='checked'");
+                                    }
+                                   value="1"/>允许&nbsp;&nbsp;
+                            
+
+                            <input type="radio" name="@item.ActionId" 
+                                @if (list.Where(ua=>(ua.ActionId==item.ActionId)&&(ua.IsAllow==false)).Count()>0)
+                                    {
+                                        @(" checked='checked'");
+                                    }
+                                   value="-1"/>拒绝&nbsp;&nbsp;
+                            
+
+                            <input type="radio" name="@item.ActionId"
+                                @if (list.Where(ua=>(ua.ActionId==item.ActionId)).Count()==0)
+                                    {
+                                        @(" checked='checked'");
+                                    }
+                                   value="0"/>取消
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

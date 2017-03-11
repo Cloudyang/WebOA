@@ -1,0 +1,275 @@
+﻿@model WebOA.Model.ActionInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/easyUI/icon.css" rel="stylesheet" />
+    <link href="~/Content/easyUI/default/easyui.css" rel="stylesheet" />
+
+
+    <script src="~/Scripts/jquery-1.11.3.min.js"></script>
+    <script src="~/Scripts/jquery.easyui-1.4.5.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    
+    <script>
+        $(function() {
+
+            $('#addDiv').hide();
+            $('#editDiv').hide();
+
+            $('#IsMenu').click(function() {
+                if (this.checked) {
+                    $('#menuUpload').show();
+                } else {
+                    $('#menuUpload').hide();
+                }
+            });
+
+            $('#btnUpload').click(function() {
+                //第一件事：判断文件input标签中有没有文件
+                if ($("#MenuPic").val()) {
+                    //让表单异步的提交到后台。
+                    $("#MenuAddFrm").ajaxSubmit({
+                        error: function (error) { alert(error); },
+                        url: '@Url.Action("UploadMenu","ActionInfo")', /*设置post提交到的页面*/
+                        type: "post", /*设置表单以post方法提交*/
+                        dataType: "text", /*设置返回值类型为文本*/
+                        success: function (data) {
+                            $("#MenuIcon").val(data);
+                            $("#menuUpload td:eq(1)").append("<img src='" + data + "' width='50px' heigth='50px' />");
+                            $("#MenuPic").val("");
+                        }
+                    });
+                } else {
+                    $.messager.alert("错误消息", "请选择合法图片！");
+                }
+            });
+
+            LoadData();
+        });
+
+        function LoadData() {
+            $('#actionList').datagrid({
+                url: '@Url.Action("GetPageList","ActionInfo")',
+                title: '权限列表',
+                width: 700,
+                height: 400,
+                fitColumns: true,
+                idField: 'ActionId',
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,
+                singleSelect: false,
+                pageSize: 10,
+                pageNumber: 1,
+                pageList: [10, 20, 30],
+                queryParams: {},
+                columns: [[
+						{ field: 'ck', checkbox: true, align: 'left', width: 50 },
+						{ field: 'ActionId', title: '主键', width: 80 },
+						{ field: 'ActionTitle', title: '权限名称', width: 120 },
+						{ field: 'ControllerName', title: '控制器名称', width: 120 },
+						{ field: 'ActionName', title: '行为名称', width: 120 },
+						{
+						    field: 'IsMenu', title: '桌面菜单', width: 80, 						            formatter: function (value, row, index) {
+						        return value?'是':'否';
+						    }
+						}
+
+                ]],
+                toolbar: [{
+                    id: 'toolbarAdd',
+                    text: '添加',
+                    iconCls: 'icon-add',
+                    handler: AddShow
+                }, {
+                    id: 'toolbarEdit',
+                    text: '修改',
+                    iconCls: 'icon-edit',
+                    handler: EditShow
+                }, {
+                    id: 'toolbarRemove',
+                    text: '删除',
+                    iconCls: 'icon-remove',
+                    handler: RemoveShow
+                }]
+            });
+        }
+
+        function AddShow() {
+            $('#addDiv input:not(#IsMenu)').not('#btnUpload').val('');
+            $('#IsMenu').removeAttr('checked');
+            $('#menuUpload').hide();
+
+            $('#addDiv').show();
+            $("#addDiv").dialog({
+                title: "添加权限",
+                collapsible: true,
+                minimizable: true,
+                maximizable: true,
+                resizable: true,
+                width: 400,
+                height:350,
+
+                buttons: [{
+                    text: "添加",
+                    iconCls: "icon-add",
+                    handler: function () {
+                        $("#addDiv form").submit();
+                    }
+                }, {
+                    text: "取消",
+                    iconCls: "icon-cancel",
+                    handler: function () {
+                        $("#addDiv").dialog("close");
+                    }
+                }]
+            });
+
+        }
+
+        function AddAfter(msg) {
+            if (msg == "ok") {
+                $('#addDiv').dialog('close');
+
+                $('#actionList').datagrid('load');
+            } else {
+                $.messager.alert('添加失败，请稍候重试');
+            }
+        }
+
+        function EditShow() {
+            var items = $('#actionList').datagrid('getSelections');
+            if (items.length != 1) {
+                $.messager.alert('警告', '请选择一条要修改的数据，渣渣');
+                return;
+            }
+            var id = items[0]["ActionId"];
+
+            $('#editDiv iframe').attr('src', '@Url.Action("Edit","ActionInfo")?id1=' + id);
+            $('#editDiv').show();
+            $('#editDiv').dialog({
+                title: "修改权限",
+                collapsible: true,
+                minimizable: true,
+                maximizable: true,
+                resizable: true,
+                width: 450,
+                height: 400,
+
+                buttons: [{
+                    text: "修改",
+                    iconCls: "icon-edit",
+                    handler: function () {
+                        $('#editDiv iframe')[0].contentWindow.EditSubmit();
+                    }
+                }, {
+                    text: "取消",
+                    iconCls: "icon-cancel",
+                    handler: function () {
+                        $("#editDiv").dialog("close");
+                    }
+                }]
+            });
+        }
+
+        function EditAfter(msg) {
+            if (msg == "ok") {
+                $('#editDiv').dialog('close');
+                $('#actionList').datagrid('reload');
+                $('#actionList').datagrid('clearSelections');
+            } else {
+                $.messager.alert('提示', '修改失败，请稍候重试');
+            }
+        }
+
+        function RemoveShow() {
+            var items = $('#actionList').datagrid('getSelections');
+            if (items.length <= 0) {
+                $.messager.alert('警告', '请选择要删除的项');
+                return;
+            }
+            $.messager.confirm('提示', '确定要删除吗？', function(msg) {
+                if (msg) {
+                    var ids = '';
+                    $.each(items, function(i, item) {
+                        ids += item['ActionId'] + ',';
+                    });
+                    ids = ids.substring(0, ids.length - 1);
+
+                    $.post('@Url.Action("Remove","ActionInfo")',
+                        {
+                            idList: ids
+                        }, function(msg) {
+                            if (msg == 'ok') {
+                                $('#actionList').datagrid('reload');
+                            } else {
+                                $.messager.alert('提示','删除失败，请稍候重试');
+                            }
+                        });
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <table id="actionList"></table>
+    </div>
+
+    <div id="addDiv">
+        @using (Ajax.BeginForm("Add", "ActionInfo", new AjaxOptions()
+        {
+            OnSuccess = "AddAfter"
+        },new
+        {
+            id = "MenuAddFrm",
+            enctype = "multipart/form-data"
+        }))
+        {
+            <table border="1">
+                <tr>
+                    <td>权限名称：</td>
+                    <td>@Html.TextBoxFor(a=>a.ActionTitle)</td>
+                </tr>
+                <tr>
+                    <td>控制器名称：</td>
+                    <td>@Html.TextBoxFor(a=>a.ControllerName)</td>
+                </tr>
+                <tr>
+                    <td>行为名称：</td>
+                    <td>@Html.TextBoxFor(a=>a.ActionName)</td>
+                </tr>
+                <tr>
+                    <td>菜单：</td>
+                    <td><input type="checkbox" name="IsMenu" id="IsMenu" value="true"/>勾选为是</td>
+                </tr>
+                <tr id="menuUpload">
+                    <td>
+                        上图图片：
+                    </td>
+                    <td>
+                        <input type="text" name="MenuIcon" id="MenuIcon"/><br/>
+                        <input type="file" name="MenuPic" id="MenuPic"/><br/>
+                        <input type="button" name="btnUpload" id="btnUpload" value="上传图标"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注：</td>
+                    <td>@Html.TextAreaFor(a=>a.Remark)</td>
+                </tr>
+            </table>
+        }
+    </div>
+    
+    <div id="editDiv">
+        <iframe src="/Error.html" frameborder="0" width="100%" height="100%" style="padding:0px;margin: 0px;"></iframe>
+    </div>
+</body>
+</html>

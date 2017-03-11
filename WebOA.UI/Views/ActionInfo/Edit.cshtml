@@ -1,0 +1,117 @@
+﻿@model WebOA.Model.ActionInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+
+    <script src="~/Scripts/jquery-1.11.3.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <script>
+        function EditAfter(msg) {
+            window.parent.EditAfter(msg);
+        }
+
+        function EditSubmit() {
+            $('form').submit();
+        }
+
+        $(function () {
+            if ($('#IsMenu').attr('checked')) {
+                $('#menuUpload').show();
+                $('#menuUpload td:last').append('<img src=' + $('#MenuIcon').val() + ' width="50px" heigth="50px" />');
+            } else {
+                $('#menuUpload').hide();
+            }
+
+            $('#IsMenu').click(function() {
+                if (this.checked) {
+                    $('#menuUpload').show();
+                } else {
+                    $('#menuUpload').hide();
+                }
+                //$('#menuUpload').toggle();
+            });
+            $('#btnUpload').click(function() {
+                //第一件事：判断文件input标签中有没有文件
+                if ($("#MenuPic").val()) {
+                    //让表单异步的提交到后台。
+                    $("#EditMenuForm").ajaxSubmit({
+                        error: function (error) { alert(error); },
+                        url: '@Url.Action("UploadMenu","ActionInfo")', /*设置post提交到的页面*/
+                        type: "post", /*设置表单以post方法提交*/
+                        dataType: "text", /*设置返回值类型为文本*/
+                        success: function (data) {
+                            $("#MenuIcon").val(data);
+                            $("#menuUpload td:eq(1)").append("<img src='" + data + "' width='50px' heigth='50px' />");
+                            $("#MenuPic").val("");
+                        }
+                    });
+                } else {
+                    $.messager.alert("错误消息", "请选择合法图片！");
+                }
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div>
+        @using (Ajax.BeginForm("Edit", "ActionInfo", new AjaxOptions()
+        {
+            OnSuccess = "EditAfter"
+        }, new
+        {
+            id = "EditMenuForm",
+            enctype = "multipart/form-data"
+        }))
+        {
+            <table border="1" width="100%">
+                <tr>
+                    <td width="100">编号：</td>
+                    <td>
+                        @Model.ActionId
+                        <input type="hidden" name="ActionId" value="@Model.ActionId"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>权限名称：</td>
+                    <td>@Html.TextBoxFor(a=>a.ActionTitle)</td>
+                </tr>
+                <tr>
+                    <td>控制器名称：</td>
+                    <td>@Html.TextBoxFor(a=>a.ControllerName)</td>
+                </tr>
+                <tr>
+                    <td>行为名称：</td>
+                    <td>@Html.TextBoxFor(a=>a.ActionName)</td>
+                </tr>
+                <tr>
+                    <td>是否菜单：</td>
+                    <td><input type="checkbox" name="IsMenu" id="IsMenu" value="true" 
+                         @Html.Raw(Model.IsMenu?"checked='checked'":"") 
+                        />勾选为是</td>
+                </tr>
+                <tr id="menuUpload">
+                    <td>上传图标：</td>
+                    <td>
+                        @Html.TextBoxFor(a=>a.MenuIcon)<br/>
+                        <input type="file" name="MenuPic" id="MenuPic"/><br/>
+                        <input type="button" name="btnUpload" id="btnUpload" value="上传图标"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注：</td>
+                    <td>@Html.TextAreaFor(a=>a.Remark)</td>
+                </tr>
+            </table>
+        }
+    </div>
+</body>
+</html>

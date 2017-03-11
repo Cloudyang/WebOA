@@ -52,9 +52,15 @@
       <DependentUpon>IDALT4New.tt</DependentUpon>
     </Compile>
     <Compile Include="IDbSession.cs" />
+    <Compile Include="IRoleInfoDal.cs" />
+    <Compile Include="IUserInfoDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebOA.Common\WebOA.Common.csproj">
+      <Project>{0455c504-7827-491d-a11a-24943e3d713a}</Project>
+      <Name>WebOA.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebOA.Model\WebOA.Model.csproj">
       <Project>{c5225ad8-6263-4ef0-a115-cba3953260e0}</Project>
       <Name>WebOA.Model</Name>

@@ -1,0 +1,52 @@
+﻿@model HM13OA.Model.RoleInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        function EditAfter(msg) {
+            window.parent.EditAfter(msg);
+        }
+
+        function EditSubmit() {
+            $("form").submit();
+        }
+    </script>
+
+</head>
+<body>
+    <div>
+        @using (Ajax.BeginForm("Edit", "RoleInfo", new AjaxOptions()
+        {
+            OnSuccess = "EditAfter"
+        }))
+        {
+            <table border="1">
+                <tr>
+                    <td>编号：</td>
+                    <td>
+                        @Model.RoleId
+                        <input type="hidden" name="RoleId" value="@Model.RoleId"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>名称：</td>
+                    <td>@Html.TextBoxFor(r=>r.RoleName)</td>
+                </tr>
+                <tr>
+                    <td>备注：</td>
+                    <td>@Html.TextAreaFor(r=>r.Remark)</td>
+                </tr>
+            </table>
+        }
+    </div>
+</body>
+</html>

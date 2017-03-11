@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumeration.cs" />
     <Compile Include="MD5Helper.cs" />
     <Compile Include="MmHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using WebOA.Model;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WebOA.Common;
 
 namespace WebOA.IService
 {
-    public interface IService<T> where T :class
+    public partial interface IUserInfoService
     {
-        bool Add(T u);
-        bool Edit(T u);
-        T GetById(int id);
-        List<T> GetList(Expression<Func<T, bool>> whereLambda);
-        List<T> GetPageList<TKey>(Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderLambda, int pageIndex, int pageSize,out int total);
-        bool Remove(T u);
-        bool Remove(int[] ids);
-        bool Remove(int id);
+        bool SetRole(int uid, string aids);
+
+        bool SetAction(int uid, int aid, IsAllow allow);
+
+        bool Login(Model.UserInfo userInfo, out int id);
     }
 }

@@ -1,0 +1,62 @@
+﻿@model WebOA.Model.UserInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+    <script src="~/Scripts/jquery-1.11.3.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        function EditSubmit() {
+            $('form').submit();
+        }
+
+        function EditAfter(msg) {
+            window.parent.EditAfter(msg);
+        }
+    </script>
+</head>
+<body>
+    <div>
+        @using (Ajax.BeginForm("Edit", "UserInfo", new AjaxOptions()
+        {
+            OnSuccess = "EditAfter"
+        }))
+        {
+            <table border="1">
+                <tr>
+                    <td>编号：</td>
+                    <td>
+                        @Model.UserId
+                        <input type="hidden" name="UserId" value="@Model.UserId" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        用户名：
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(u => u.UserName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>密码：</td>
+                    <td>
+                        <input type="password" name="UserPwd" value=" " />
+                        <input type="hidden" name="pwd2" value="@Model.UserPwd" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注：</td>
+                    <td>@Html.TextAreaFor(u => u.Remark)</td>
+                </tr>
+            </table>
+        }
+    </div>
+</body>
+</html>
